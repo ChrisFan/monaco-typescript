@@ -75,7 +75,12 @@ function setupMode(defaults:LanguageServiceDefaultsImpl, modeId:string, language
 	disposables.push(monaco.languages.registerOnTypeFormattingEditProvider(modeId, new languageFeatures.FormatOnTypeAdapter(worker)));
 	disposables.push(new languageFeatures.DiagnostcsAdapter(defaults, modeId, worker));
 	disposables.push(monaco.languages.setLanguageConfiguration(modeId, richEditConfiguration));
-	disposables.push(monaco.languages.setTokensProvider(modeId, createTokenizationSupport(language)));
+
+	// @added by 青栀
+	// 目前在 Tea 中有自定义的 javascript token provider
+	if (modeId !== 'javascript') {
+		disposables.push(monaco.languages.setTokensProvider(modeId, createTokenizationSupport(language)));
+	}
 
 	return worker;
 }
